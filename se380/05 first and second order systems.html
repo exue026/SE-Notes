@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <meta name="generator" content="pandoc">
+  
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="/SE-Notes/style.css" type="text/css">
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<title>First and Second Order Systems</title>
+</head>
+<body>
+
+<h1 id="first-and-second-order-systems">First and Second Order Systems</h1>
+<a href="index.html">Back to se380</a>
+<div id="TOC">
+
+<ul>
+<li><a href="#first-order">First order</a></li>
+<li>
+<a href="#second-order">Second order</a><ul>
+<li><a href="#e.g.">e.g.</a></li>
+<li><a href="#pole-locations">Pole locations</a></li>
+<li><a href="#step-response">Step response</a></li>
+</ul>
+</li>
+<li><a href="#underdamped-systems">Underdamped Systems</a></li>
+</ul>
+</div>
+<h2 id="first-order">First order</h2>
+<p><span class="math display">\[\tau \dot{y} = ku\]</span><br>
+or<br>
+<span class="math display">\[\frac{Y(s)}{U(s)} = \frac{K}{\tau s + 1}\]</span><br>
+or<br>
+<span class="math display">\[\begin{align}
+\dot{x}&amp;=\frac{-x}{\tau} + \frac{K}{\tau} u\\
+y &amp;= x
+\end{align}\]</span></p>
+<p>Observations:</p>
+<ul>
+<li>Pole at <span class="math inline">\(s=\frac{-1}{\tau}\)</span>
+</li>
+<li>No zeroes</li>
+<li>BIBO stable if and only if <span class="math inline">\(\tau \gt 0\)</span>
+</li>
+<li>steady-state gain: <span class="math inline">\(K\)</span>
+</li>
+<li>bandwidth: <span class="math inline">\(\frac{1}{\tau}\)</span> rad/s</li>
+<li>Impulse response: <span class="math inline">\(g(t)=\frac{K}{\tau} e^{-1/\tau} 1(t)\)</span><ul>
+<li><span class="math inline">\(g(0)=\frac{K}{\tau}\)</span></li>
+<li><span class="math inline">\(g(\tau)=g(0)e^{-1} \approx 0.37g(0)\)</span></li>
+<li><span class="math inline">\(g(2\tau)=g(0)e^{-2} \approx 0.14g(0)\)</span></li>
+</ul>
+</li>
+<li>Higher bandwidth implies faster impulse response, and vice versa</li>
+</ul>
+<p>Step response:<br>
+<span class="math display">\[y(t) = \mathcal{L}^{-1}\{G(s)U(s)\} = \mathcal{L}^{-1}\left\{\frac{K}{\tau s + 1} \frac{1}{s}\right\} = \mathcal{L}^{-1}\left\{\frac{K}{s} - \frac{K}{s + \frac{1}{\tau}}\right\}\]</span><br>
+<span class="math display">\[K(1-e^{\frac{-t}{\tau}}), \quad t \ge 0\]</span></p>
+<p><img src="img/firstordertime.png"></p>
+<p>Observations:</p>
+<ol>
+<li>After <span class="math inline">\(4\tau\)</span> seconds, <span class="math inline">\(y(t)\)</span> is within 2% of its steady-state value</li>
+<li>For all <span class="math inline">\(t \gt 0\)</span>, <span class="math inline">\(y(t) \lt y_{ss}\)</span> (no overshoot)</li>
+<li>
+<span class="math inline">\(y(t)\)</span> increases monotonically (no oscillations)</li>
+<li>Decrease in <span class="math inline">\(\tau \Leftrightarrow\)</span> step response gets faster <span class="math inline">\(\Leftrightarrow\)</span> bandwidth goes up <span class="math inline">\(\Leftrightarrow\)</span> poles move to the left</li>
+</ol>
+<h2 id="second-order">Second order</h2>
+<p><span class="math display">\[\ddot{y}+2\zeta\omega_n \dot{y} + \omega_n^2 y = K\omega_n^2 u\]</span><br>
+or<br>
+<span class="math display">\[ \frac{Y(s)}{U(s)} = \frac{K\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}\]</span><br>
+or<br>
+<span class="math display">\[\begin{align}
+\dot{x} &amp;= \begin{bmatrix}0&amp;1\\-\omega_n^2&amp;-2\zeta\omega_n\end{bmatrix}x + \begin{bmatrix}0\\K\omega_n^2\end{bmatrix}u\\
+y &amp;= \begin{bmatrix} 1 &amp; 0\end{bmatrix}x\\
+\end{align}\]</span></p>
+<h3 id="e.g.">e.g.</h3>
+<p><img src="img/secondorderspring.png"></p>
+<p><span class="math display">\[\begin{align}
+M \ddot{q} &amp;= u - K_{spring} q - b\dot{q}\\
+\frac{Y(s)}{U(s)} &amp;= \frac{\frac{1}{M}}{s^2 + \frac{b}{M}s + \frac{K_{spring}}{M}}\\
+\\
+\omega_n &amp;= \sqrt{\frac{K_{spring}}{M}}\\
+\zeta &amp;= \frac{b}{2 \sqrt{K_{spring}M}}\\
+K &amp;= \frac{1}{K_{spring}}
+\end{align}\]</span></p>
+<h3 id="pole-locations">Pole locations</h3>
+<p>From the quadratic formula, find the zeroes of the denominator:<br>
+<span class="math display">\[s = -\zeta \omega_n \pm \omega_n \sqrt{\zeta^2 - 1} = \omega_n\left(-\zeta \pm \sqrt{\zeta^2 - 1}\right)\]</span></p>
+<p><img src="img/secondorderpolelocations.png"></p>
+<p>Pole locations are used to categorize the system:</p>
+<ul>
+<li>Undamped <span class="math inline">\(\zeta = 0\)</span>
+</li>
+<li>Underdamped <span class="math inline">\(0 \lt \zeta \lt 1\)</span>
+</li>
+<li>Critically damped <span class="math inline">\(\zeta = 1\)</span>
+</li>
+<li>Overdamped <span class="math inline">\(\zeta \gt 1\)</span>
+</li>
+</ul>
+<p>Steady-state gain: <span class="math inline">\(K\)</span><br>
+Zeroes: none</p>
+<p><img src="img/secondordergian.png"></p>
+<h3 id="step-response">Step response</h3>
+<p><img src="img/secondorderstepresponse.png"></p>
+<h2 id="underdamped-systems">Underdamped Systems</h2>
+<ul><li>Poles are complex conjugate: <span class="math inline">\(s = -\zeta \omega_n \pm j\omega_n \sqrt{q - \zeta^2} = \omega_n e^{\pm j (\pi - \theta)}, \theta = \arccos(\zeta)\)</span>
+</li></ul>
+<p><img src="img/underdampedpolar.png"></p>
+<h4 id="impulse-response">Impulse response</h4>
+<p><span class="math display">\[g(t) = K\frac{\omega_n}{\sqrt{1-\zeta^2}} e^{-\zeta \omega_n t} \sin\left(\omega_n \sqrt{1-\zeta^2} t\right), \quad t \ge 0\]</span></p>
+<div id="footer">
+  Notes by <a href="http://www.davepagurek.com">Dave Pagurek</a>. Contribute <a href="https://github.com/davepagurek/SE-Notes">on GitHub</a>.
+</div>
+</body>
+</html>
